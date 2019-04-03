@@ -27,15 +27,17 @@ class ElevatorServer: public PacketEventAbstract {
     // Buffer contains data from the packet coming in at the start of the function
     // User data is written into the buffer to send it back
     void event(float * buffer) {     
+      //Serial.println("Talking to Java :)");
       //buffer [0] = currentLevel, 
       //buffer[1] = dest level,
       //buffer[2] = has the user pressed something on kioskk,
       //buffer[3]  = what the user wants
-      buffer[0]=currentLevel;
-      buffer[1] = destLevel;
+      buffer[0]= (double) currentLevel;
+      buffer[1] = (double) destLevel;
+      }
       if(buffer[2]){//if user pressed a button
         buffer[2] = 0;//acknowledge
-        destLevel = buffer[2];
+        destLevel = buffer[3];
         doneMoving = false;//let the elevator know it needs to move now
       }
     }

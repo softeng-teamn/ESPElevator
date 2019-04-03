@@ -19,9 +19,9 @@ const int floorOne = 34;
 const int floorTwo = 35;
 const int floorThree = 32;
 const int floorFour = 33;
-const int elevatorPin = 23;
+const int elevatorPin = 26;
 int startTime = 0;
-extern bool doneMoving = true;
+extern bool doneMoving;
 extern int currentLevel; //start on first floor
 extern int destLevel;
 //time between floors in ms
@@ -46,7 +46,7 @@ void setup() {
   pinMode(floorThree, INPUT_PULLUP);
   pinMode(floorFour, INPUT_PULLUP);
   elevator.attach(elevatorPin, 1000, 2000);
-
+  elevator.write(90);
   //setup talking to javaFX
   String * namePointer = new String("MyRobotName");
   
@@ -63,8 +63,7 @@ void loop()
 Serial.print("Dest Level: ");
 Serial.print(destLevel);
 Serial.print("\tCurrentLevel: ");
-Serial.print(currentLevel);
-e.test(); 
+Serial.println(currentLevel);
 
 
   manager.loop();
@@ -77,22 +76,23 @@ e.test();
 
   if (doneMoving) {
     checkCalls();
+    elevator.write(90);
   }
   
   else if(currentLevel != destLevel) { //if a call has been made to another floor
     int difference = destLevel - currentLevel;//difference between floors
     if (millis() < startTime + timeBetweenFloors * abs(difference)) { //if hasn't traveled dist between floors yet
-      Serial.print("Moving motor ");
       elevator.write((difference / abs(difference)) * vel + 90); //diff/abs(diff) gives the sign (up or down)
     }
     else {//elevator traveled correct distance
-      doneMoving = true;
       elevator.write(90);//don't move if on right floor
+      doneMoving = true;
       currentLevel = destLevel;
     }
   }
   else{//call made to floor elevator is on
     doneMoving = true;
+    elevator.write(90);//don't move if on right floor
   }
   delay(15);
   
