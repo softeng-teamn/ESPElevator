@@ -65,14 +65,14 @@ Serial.print(destLevel);
 Serial.print("\tCurrentLevel: ");
 Serial.println(currentLevel);
 
-
+/*
   manager.loop();
   if (manager.getState() == Connected){
     
     coms.server();
   }
   //move elevator to floor
-
+*/
 
   if (doneMoving) {
     checkCalls();

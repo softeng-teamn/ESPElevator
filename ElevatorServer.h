@@ -34,7 +34,6 @@ class ElevatorServer: public PacketEventAbstract {
       //buffer[3]  = what the user wants
       buffer[0]= (double) currentLevel;
       buffer[1] = (double) destLevel;
-      }
       if(buffer[2]){//if user pressed a button
         buffer[2] = 0;//acknowledge
         destLevel = buffer[3];
