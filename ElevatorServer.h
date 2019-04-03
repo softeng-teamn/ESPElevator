@@ -11,6 +11,11 @@
 #include <SimplePacketComs.h>
 #include <BNO055SimplePacketComs.h>
 
+
+    int currentLevel = 1;
+    int destLevel = 1;
+    boolean doneMoving = true;
+
 class ElevatorServer: public PacketEventAbstract {
   public:
     // Packet ID needs to be set
@@ -21,15 +26,18 @@ class ElevatorServer: public PacketEventAbstract {
     //User function to be called when a packet comes in
     // Buffer contains data from the packet coming in at the start of the function
     // User data is written into the buffer to send it back
-    void event(float * buffer) {
-      buffer[0]=37;
-      Serial.println("Talking to client");
-      
-      /*extern int currentLevel;//test if these work.
-      extern int destLevel;
-      *buffer = (float) currentLevel;
-      buffer[1] = (float) destLevel;
-      */
+    void event(float * buffer) {     
+      //buffer [0] = currentLevel, 
+      //buffer[1] = dest level,
+      //buffer[2] = has the user pressed something on kioskk,
+      //buffer[3]  = what the user wants
+      buffer[0]=currentLevel;
+      buffer[1] = destLevel;
+      if(buffer[2]){//if user pressed a button
+        buffer[2] = 0;//acknowledge
+        destLevel = buffer[2];
+        doneMoving = false;//let the elevator know it needs to move now
+      }
     }
 };
 
